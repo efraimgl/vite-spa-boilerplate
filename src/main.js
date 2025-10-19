@@ -127,6 +127,15 @@ function renderApp() {
   app.innerHTML = `
     <!-- Header -->
     <header class="header">
+      <div class="header-video-bg">
+        <iframe
+          src="https://www.youtube.com/embed/5fpGTE3aIw0?autoplay=1&mute=1&loop=1&playlist=5fpGTE3aIw0&controls=0&showinfo=0&rel=0&modestbranding=1"
+          title="Background video"
+          frameborder="0"
+          allow="autoplay; encrypted-media"
+          allowfullscreen>
+        </iframe>
+      </div>
       <div class="header-content">
         <div class="logo">Neural Sync</div>
         <nav class="nav">
@@ -140,15 +149,86 @@ function renderApp() {
     <!-- Hero Section -->
     <section class="hero">
       <h1>Understand Your Mind</h1>
-      <div class="hero-video">
-        <iframe
-          src="https://www.youtube.com/embed/5fpGTE3aIw0?si=-jiCEvqZDdvpScTr"
-          title="YouTube video player"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen>
-        </iframe>
+      <div class="hero-brain-animation">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <!-- Brain outline -->
+          <g class="brain-outline">
+            <!-- Left hemisphere -->
+            <path d="M 60 100 Q 50 70, 60 50 Q 70 30, 90 30 Q 100 30, 105 40 Q 110 30, 120 35 Q 130 40, 125 55 Q 130 65, 125 75 Q 130 85, 125 95 Q 125 105, 120 115 Q 115 125, 105 130 Q 95 135, 85 130 Q 75 125, 70 115 Q 65 105, 60 100 Z"
+                  fill="none" stroke="url(#brainGradient1)" stroke-width="2" opacity="0.8"/>
+            <!-- Right hemisphere -->
+            <path d="M 140 100 Q 150 70, 140 50 Q 130 30, 110 30 Q 100 30, 95 40 Q 90 30, 80 35 Q 70 40, 75 55 Q 70 65, 75 75 Q 70 85, 75 95 Q 75 105, 80 115 Q 85 125, 95 130 Q 105 135, 115 130 Q 125 125, 130 115 Q 135 105, 140 100 Z"
+                  fill="none" stroke="url(#brainGradient2)" stroke-width="2" opacity="0.8"/>
+          </g>
+
+          <!-- Neural connections -->
+          <g class="neural-connections">
+            <circle cx="70" cy="60" r="3" fill="#667eea" opacity="0">
+              <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0s"/>
+              <animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite" begin="0s"/>
+            </circle>
+            <circle cx="90" cy="50" r="3" fill="#764ba2" opacity="0">
+              <animate attributeName="opacity" values="0;1;0" dur="2.5s" repeatCount="indefinite" begin="0.5s"/>
+              <animate attributeName="r" values="3;5;3" dur="2.5s" repeatCount="indefinite" begin="0.5s"/>
+            </circle>
+            <circle cx="110" cy="50" r="3" fill="#f093fb" opacity="0">
+              <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="1s"/>
+              <animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite" begin="1s"/>
+            </circle>
+            <circle cx="130" cy="60" r="3" fill="#667eea" opacity="0">
+              <animate attributeName="opacity" values="0;1;0" dur="2.5s" repeatCount="indefinite" begin="1.5s"/>
+              <animate attributeName="r" values="3;5;3" dur="2.5s" repeatCount="indefinite" begin="1.5s"/>
+            </circle>
+            <circle cx="80" cy="90" r="3" fill="#764ba2" opacity="0">
+              <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="0.3s"/>
+              <animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite" begin="0.3s"/>
+            </circle>
+            <circle cx="100" cy="85" r="3" fill="#f093fb" opacity="0">
+              <animate attributeName="opacity" values="0;1;0" dur="2.5s" repeatCount="indefinite" begin="0.8s"/>
+              <animate attributeName="r" values="3;5;3" dur="2.5s" repeatCount="indefinite" begin="0.8s"/>
+            </circle>
+            <circle cx="120" cy="90" r="3" fill="#667eea" opacity="0">
+              <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" begin="1.3s"/>
+              <animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite" begin="1.3s"/>
+            </circle>
+          </g>
+
+          <!-- Energy waves -->
+          <g class="energy-waves">
+            <circle cx="100" cy="80" r="20" fill="none" stroke="#667eea" stroke-width="1" opacity="0">
+              <animate attributeName="r" values="20;60;80" dur="3s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.8;0.3;0" dur="3s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="100" cy="80" r="20" fill="none" stroke="#764ba2" stroke-width="1" opacity="0">
+              <animate attributeName="r" values="20;60;80" dur="3s" repeatCount="indefinite" begin="1s"/>
+              <animate attributeName="opacity" values="0.8;0.3;0" dur="3s" repeatCount="indefinite" begin="1s"/>
+            </circle>
+            <circle cx="100" cy="80" r="20" fill="none" stroke="#f093fb" stroke-width="1" opacity="0">
+              <animate attributeName="r" values="20;60;80" dur="3s" repeatCount="indefinite" begin="2s"/>
+              <animate attributeName="opacity" values="0.8;0.3;0" dur="3s" repeatCount="indefinite" begin="2s"/>
+            </circle>
+          </g>
+
+          <!-- Gradients -->
+          <defs>
+            <linearGradient id="brainGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#667eea;stop-opacity:1">
+                <animate attributeName="stop-color" values="#667eea;#764ba2;#667eea" dur="4s" repeatCount="indefinite"/>
+              </stop>
+              <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1">
+                <animate attributeName="stop-color" values="#764ba2;#f093fb;#764ba2" dur="4s" repeatCount="indefinite"/>
+              </stop>
+            </linearGradient>
+            <linearGradient id="brainGradient2" x1="100%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#764ba2;stop-opacity:1">
+                <animate attributeName="stop-color" values="#764ba2;#f093fb;#764ba2" dur="4s" repeatCount="indefinite"/>
+              </stop>
+              <stop offset="100%" style="stop-color:#f093fb;stop-opacity:1">
+                <animate attributeName="stop-color" values="#f093fb;#667eea;#f093fb" dur="4s" repeatCount="indefinite"/>
+              </stop>
+            </linearGradient>
+          </defs>
+        </svg>
       </div>
       <p class="subtitle">Advanced brain wave analysis powered by AI</p>
       <div class="cta-buttons">
