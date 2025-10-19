@@ -128,22 +128,24 @@ function renderApp() {
     <!-- Header -->
     <header class="header">
       <div class="header-content">
-        <div class="logo">Neural Sync</div>
-        <nav class="nav">
-          <a href="#features">Features</a>
-          <a href="#status">Status</a>
-          <a href="#about">About</a>
-        </nav>
-      </div>
-      <div class="header-video">
-        <iframe
-          src="https://www.youtube.com/embed/5fpGTE3aIw0?si=-jiCEvqZDdvpScTr"
-          title="YouTube video player"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen>
-        </iframe>
+        <div class="header-left">
+          <div class="logo">Neural Sync</div>
+          <nav class="nav">
+            <a href="#features">Features</a>
+            <a href="#status">Status</a>
+            <a href="#about">About</a>
+          </nav>
+        </div>
+        <div class="header-video">
+          <iframe
+            src="https://www.youtube.com/embed/5fpGTE3aIw0?si=-jiCEvqZDdvpScTr"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+          </iframe>
+        </div>
       </div>
     </header>
 
