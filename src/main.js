@@ -128,30 +128,28 @@ function renderApp() {
     <!-- Header -->
     <header class="header">
       <div class="header-content">
-        <div class="header-left">
-          <div class="logo">Neural Sync</div>
-          <nav class="nav">
-            <a href="#features">Features</a>
-            <a href="#status">Status</a>
-            <a href="#about">About</a>
-          </nav>
-        </div>
-        <div class="header-video">
-          <iframe
-            src="https://www.youtube.com/embed/5fpGTE3aIw0?si=-jiCEvqZDdvpScTr"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen>
-          </iframe>
-        </div>
+        <div class="logo">Neural Sync</div>
+        <nav class="nav">
+          <a href="#features">Features</a>
+          <a href="#status">Status</a>
+          <a href="#about">About</a>
+        </nav>
       </div>
     </header>
 
     <!-- Hero Section -->
     <section class="hero">
       <h1>Understand Your Mind</h1>
+      <div class="hero-video">
+        <iframe
+          src="https://www.youtube.com/embed/5fpGTE3aIw0?si=-jiCEvqZDdvpScTr"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
+      </div>
       <p class="subtitle">Advanced brain wave analysis powered by AI</p>
       <div class="cta-buttons">
         <button id="connect-btn" class="btn btn-primary">Connect Device</button>

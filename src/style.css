@@ -81,34 +81,12 @@ body::before {
 }
 
 .header-content {
-  max-width: 1200px;
+  max-width: 980px;
   margin: 0 auto;
   padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 32px;
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-}
-
-.header-video {
-  width: 280px;
-  height: 158px;
-  position: relative;
-  flex-shrink: 0;
-}
-
-.header-video iframe {
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
-  border: 1px solid rgba(102, 126, 234, 0.3);
 }
 
 .logo {
@@ -185,13 +163,35 @@ body::before {
   font-weight: 700;
   line-height: 1.07;
   letter-spacing: -0.02em;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-shadow: 0 0 80px rgba(102, 126, 234, 0.5);
   animation: fadeInUp 0.8s ease-out 0.4s both, textGlow 3s ease-in-out infinite;
+}
+
+.hero-video {
+  max-width: 700px;
+  margin: 0 auto 32px;
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  height: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  animation: fadeInUp 0.8s ease-out 0.5s both;
+}
+
+.hero-video iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
 }
 
 @keyframes textGlow {
@@ -210,7 +210,7 @@ body::before {
   letter-spacing: 0.007em;
   color: #b8b8d1;
   margin-bottom: 40px;
-  animation: fadeInUp 0.8s ease-out 0.6s both;
+  animation: fadeInUp 0.8s ease-out 0.7s both;
 }
 
 .cta-buttons {
@@ -219,7 +219,7 @@ body::before {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  animation: fadeInUp 0.8s ease-out 0.8s both;
+  animation: fadeInUp 0.8s ease-out 0.9s both;
 }
 
 .btn {
@@ -629,29 +629,23 @@ body::before {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .header-content {
-    flex-direction: column;
-    gap: 16px;
-    padding: 16px 24px;
-  }
-
-  .header-left {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .header-video {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16/9;
-  }
-
   .hero {
     padding: 80px 24px 60px;
   }
 
   .hero h1 {
     font-size: 44px;
+    margin-bottom: 24px;
+  }
+
+  .hero-video {
+    max-width: 100%;
+    margin-bottom: 24px;
+    border-radius: 12px;
+  }
+
+  .hero-video iframe {
+    border-radius: 10px;
   }
 
   .hero .subtitle {
