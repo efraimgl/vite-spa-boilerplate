@@ -89,6 +89,28 @@ body::before {
   justify-content: space-between;
 }
 
+.header-video {
+  max-width: 980px;
+  margin: 24px auto 0;
+  padding: 0 24px;
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  height: 0;
+  overflow: hidden;
+}
+
+.header-video iframe {
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  width: calc(100% - 48px);
+  height: 100%;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
 .logo {
   font-family: var(--font-code);
   font-size: 21px;
@@ -607,6 +629,18 @@ body::before {
 
 /* Responsive */
 @media (max-width: 768px) {
+  .header-video {
+    padding: 0 16px;
+    margin: 16px auto 0;
+  }
+
+  .header-video iframe {
+    left: 16px;
+    right: 16px;
+    width: calc(100% - 32px);
+    border-radius: 8px;
+  }
+
   .hero {
     padding: 80px 24px 60px;
   }

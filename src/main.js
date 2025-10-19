@@ -135,6 +135,16 @@ function renderApp() {
           <a href="#about">About</a>
         </nav>
       </div>
+      <div class="header-video">
+        <iframe
+          src="https://www.youtube.com/embed/5fpGTE3aIw0?si=-jiCEvqZDdvpScTr"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
+      </div>
     </header>
 
     <!-- Hero Section -->
