@@ -24,6 +24,41 @@ function simulateBrainWaveData() {
   }
 }
 
+// Generate animated brain wave SVG
+function generateBrainWaveSVG() {
+  return `
+    <svg width="120" height="80" viewBox="0 0 120 80" style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));">
+      <path id="wave1" d="M 0 40 Q 15 20, 30 40 T 60 40 T 90 40 T 120 40"
+            stroke="#fff" stroke-width="3" fill="none" opacity="0.9">
+        <animate attributeName="d"
+                 dur="2s"
+                 repeatCount="indefinite"
+                 values="M 0 40 Q 15 20, 30 40 T 60 40 T 90 40 T 120 40;
+                         M 0 40 Q 15 60, 30 40 T 60 40 T 90 40 T 120 40;
+                         M 0 40 Q 15 20, 30 40 T 60 40 T 90 40 T 120 40"/>
+      </path>
+      <path id="wave2" d="M 0 50 Q 15 30, 30 50 T 60 50 T 90 50 T 120 50"
+            stroke="#fff" stroke-width="2.5" fill="none" opacity="0.7">
+        <animate attributeName="d"
+                 dur="2.5s"
+                 repeatCount="indefinite"
+                 values="M 0 50 Q 15 30, 30 50 T 60 50 T 90 50 T 120 50;
+                         M 0 50 Q 15 70, 30 50 T 60 50 T 90 50 T 120 50;
+                         M 0 50 Q 15 30, 30 50 T 60 50 T 90 50 T 120 50"/>
+      </path>
+      <path id="wave3" d="M 0 30 Q 15 15, 30 30 T 60 30 T 90 30 T 120 30"
+            stroke="#fff" stroke-width="2" fill="none" opacity="0.5">
+        <animate attributeName="d"
+                 dur="3s"
+                 repeatCount="indefinite"
+                 values="M 0 30 Q 15 15, 30 30 T 60 30 T 90 30 T 120 30;
+                         M 0 30 Q 15 45, 30 30 T 60 30 T 90 30 T 120 30;
+                         M 0 30 Q 15 15, 30 30 T 60 30 T 90 30 T 120 30"/>
+      </path>
+    </svg>
+  `
+}
+
 // Update metrics display
 function updateMetrics() {
   const alphaEl = document.getElementById('alpha-value')
@@ -31,10 +66,20 @@ function updateMetrics() {
   const thetaEl = document.getElementById('theta-value')
   const deltaEl = document.getElementById('delta-value')
 
+  const alphaBar = document.getElementById('alpha-bar')
+  const betaBar = document.getElementById('beta-bar')
+  const thetaBar = document.getElementById('theta-bar')
+  const deltaBar = document.getElementById('delta-bar')
+
   if (alphaEl) alphaEl.textContent = state.brainWaveData.alpha + '%'
   if (betaEl) betaEl.textContent = state.brainWaveData.beta + '%'
   if (thetaEl) thetaEl.textContent = state.brainWaveData.theta + '%'
   if (deltaEl) deltaEl.textContent = state.brainWaveData.delta + '%'
+
+  if (alphaBar) alphaBar.style.width = state.brainWaveData.alpha + '%'
+  if (betaBar) betaBar.style.width = state.brainWaveData.beta + '%'
+  if (thetaBar) thetaBar.style.width = state.brainWaveData.theta + '%'
+  if (deltaBar) deltaBar.style.width = state.brainWaveData.delta + '%'
 }
 
 // Toggle connection
@@ -46,7 +91,7 @@ function toggleConnection() {
 
   if (state.isConnected) {
     statusDisplay.innerHTML = `
-      <div class="wave-animation">🧠</div>
+      <div class="wave-animation">${generateBrainWaveSVG()}</div>
       <h3>Connected</h3>
       <p>Analyzing brain wave patterns in real-time</p>
     `
@@ -58,7 +103,14 @@ function toggleConnection() {
     setInterval(simulateBrainWaveData, 2000)
   } else {
     statusDisplay.innerHTML = `
-      <div class="wave-animation">🔌</div>
+      <div class="wave-animation">
+        <svg width="80" height="80" viewBox="0 0 80 80" style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));">
+          <circle cx="40" cy="40" r="30" stroke="#fff" stroke-width="3" fill="none" opacity="0.6"/>
+          <circle cx="40" cy="40" r="20" stroke="#fff" stroke-width="2" fill="none" opacity="0.4"/>
+          <line x1="40" y1="20" x2="40" y2="60" stroke="#fff" stroke-width="3" opacity="0.5"/>
+          <line x1="20" y1="40" x2="60" y2="40" stroke="#fff" stroke-width="3" opacity="0.5"/>
+        </svg>
+      </div>
       <h3>Device Disconnected</h3>
       <p>Connect your device to begin analysis</p>
     `
@@ -145,30 +197,49 @@ function renderApp() {
         </div>
 
         <div class="brain-wave-display">
-          <div class="wave-animation">🔌</div>
+          <div class="wave-animation">
+            <svg width="80" height="80" viewBox="0 0 80 80" style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));">
+              <circle cx="40" cy="40" r="30" stroke="#fff" stroke-width="3" fill="none" opacity="0.6"/>
+              <circle cx="40" cy="40" r="20" stroke="#fff" stroke-width="2" fill="none" opacity="0.4"/>
+              <line x1="40" y1="20" x2="40" y2="60" stroke="#fff" stroke-width="3" opacity="0.5"/>
+              <line x1="20" y1="40" x2="60" y2="40" stroke="#fff" stroke-width="3" opacity="0.5"/>
+            </svg>
+          </div>
           <h3>Device Disconnected</h3>
           <p>Connect your device to begin analysis</p>
         </div>
 
         <div class="metrics-grid">
           <div class="metric">
-            <div class="metric-value" id="alpha-value">0%</div>
             <div class="metric-label">Alpha Waves</div>
+            <div class="metric-value" id="alpha-value">0%</div>
+            <div class="metric-bar">
+              <div class="metric-bar-fill" id="alpha-bar" style="width: 0%"></div>
+            </div>
           </div>
 
           <div class="metric">
-            <div class="metric-value" id="beta-value">0%</div>
             <div class="metric-label">Beta Waves</div>
+            <div class="metric-value" id="beta-value">0%</div>
+            <div class="metric-bar">
+              <div class="metric-bar-fill" id="beta-bar" style="width: 0%"></div>
+            </div>
           </div>
 
           <div class="metric">
-            <div class="metric-value" id="theta-value">0%</div>
             <div class="metric-label">Theta Waves</div>
+            <div class="metric-value" id="theta-value">0%</div>
+            <div class="metric-bar">
+              <div class="metric-bar-fill" id="theta-bar" style="width: 0%"></div>
+            </div>
           </div>
 
           <div class="metric">
-            <div class="metric-value" id="delta-value">0%</div>
             <div class="metric-label">Delta Waves</div>
+            <div class="metric-value" id="delta-value">0%</div>
+            <div class="metric-bar">
+              <div class="metric-bar-fill" id="delta-bar" style="width: 0%"></div>
+            </div>
           </div>
         </div>
       </div>
