@@ -83,6 +83,20 @@ function updateMetrics() {
   if (deltaBar) deltaBar.style.width = state.brainWaveData.delta + '%'
 }
 
+// Toggle high contrast mode
+function toggleContrast() {
+  const root = document.documentElement
+  const currentTheme = root.getAttribute('data-theme')
+
+  if (currentTheme === 'high-contrast') {
+    root.removeAttribute('data-theme')
+    localStorage.setItem('theme', 'default')
+  } else {
+    root.setAttribute('data-theme', 'high-contrast')
+    localStorage.setItem('theme', 'high-contrast')
+  }
+}
+
 // Handle waitlist form submission
 function handleWaitlistSubmit(event) {
   event.preventDefault()
@@ -150,8 +164,11 @@ function renderApp() {
   const app = document.querySelector('#app')
 
   app.innerHTML = `
+    <!-- Skip to Content Link for Screen Readers -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
     <!-- Header -->
-    <header class="header">
+    <header class="header" role="banner">
       <div class="header-video-bg">
         <iframe
           src="https://www.youtube.com/embed/5fpGTE3aIw0?autoplay=1&mute=1&loop=1&playlist=5fpGTE3aIw0&controls=0&showinfo=0&rel=0&modestbranding=1"
@@ -162,18 +179,27 @@ function renderApp() {
         </iframe>
       </div>
       <div class="header-content">
-        <div class="logo">Neural Sync</div>
-        <nav class="nav">
+        <div class="logo" aria-label="Neural Sync - Home">Neural Sync</div>
+        <nav class="nav" role="navigation" aria-label="Main navigation">
           <a href="#features">Features</a>
           <a href="#status">Status</a>
           <a href="#faq">Q&A</a>
           <a href="#waitlist">Waitlist</a>
+          <button
+            id="contrast-toggle"
+            class="contrast-toggle"
+            aria-label="Toggle high contrast mode"
+            title="Toggle high contrast mode">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
+            </svg>
+          </button>
         </nav>
       </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section id="main-content" class="hero" role="main">
       <h1>Unlock Your Mind's Full Potential</h1>
       <div class="hero-brain-animation">
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -498,34 +524,52 @@ function renderApp() {
     </section>
 
     <!-- Q&A Section -->
-    <section id="faq" class="faq-section">
+    <section id="faq" class="faq-section" aria-labelledby="faq-heading">
       <div class="faq-container">
-        <h2>Frequently Asked Questions</h2>
-        <div class="faq-grid">
-          <div class="faq-item">
-            <h3>What are brain waves?</h3>
+        <h2 id="faq-heading">Frequently Asked Questions</h2>
+        <div class="faq-accordion" role="region" aria-label="Frequently Asked Questions">
+          <details class="faq-item">
+            <summary>
+              <h3>What are brain waves?</h3>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
             <p>Brain waves are electrical impulses in the brain. They are measured in different frequency ranges: Alpha (relaxation), Beta (active thinking), Theta (meditation), and Delta (deep sleep).</p>
-          </div>
-          <div class="faq-item">
-            <h3>How does Neural Sync work?</h3>
+          </details>
+          <details class="faq-item">
+            <summary>
+              <h3>How does Neural Sync work?</h3>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
             <p>Neural Sync uses advanced AI algorithms to analyze brain wave patterns from compatible EEG devices, providing real-time insights into your mental state and cognitive performance.</p>
-          </div>
-          <div class="faq-item">
-            <h3>Is my data secure?</h3>
+          </details>
+          <details class="faq-item">
+            <summary>
+              <h3>Is my data secure?</h3>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
             <p>Absolutely. All your brain wave data is encrypted end-to-end and processed on-device. We never share or sell your personal information.</p>
-          </div>
-          <div class="faq-item">
-            <h3>What devices are supported?</h3>
+          </details>
+          <details class="faq-item">
+            <summary>
+              <h3>What devices are supported?</h3>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
             <p>Neural Sync supports most consumer EEG devices including Muse, NeuroSky, Emotiv, and other Bluetooth-enabled brain wave sensors.</p>
-          </div>
-          <div class="faq-item">
-            <h3>Can I use this for meditation?</h3>
+          </details>
+          <details class="faq-item">
+            <summary>
+              <h3>Can I use this for meditation?</h3>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
             <p>Yes! Neural Sync is perfect for meditation practice. Track your theta waves to measure depth of meditation and improve your mindfulness techniques.</p>
-          </div>
-          <div class="faq-item">
-            <h3>How accurate is the analysis?</h3>
+          </details>
+          <details class="faq-item">
+            <summary>
+              <h3>How accurate is the analysis?</h3>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
             <p>Our AI-powered analysis achieves 95%+ accuracy in brain wave classification, trained on millions of EEG samples from clinical research data.</p>
-          </div>
+          </details>
         </div>
       </div>
     </section>
@@ -659,6 +703,11 @@ function renderApp() {
     waitlistForm.addEventListener('submit', handleWaitlistSubmit)
   }
 
+  const contrastToggle = document.getElementById('contrast-toggle')
+  if (contrastToggle) {
+    contrastToggle.addEventListener('click', toggleContrast)
+  }
+
   // Show success message if already submitted
   if (state.waitlistSubmitted) {
     const form = document.getElementById('waitlist-form')
@@ -668,6 +717,12 @@ function renderApp() {
       successMessage.style.display = 'block'
       successMessage.classList.add('show')
     }
+  }
+
+  // Load saved theme preference
+  const savedTheme = localStorage.getItem('theme')
+  if (savedTheme === 'high-contrast') {
+    document.documentElement.setAttribute('data-theme', 'high-contrast')
   }
 }
 
