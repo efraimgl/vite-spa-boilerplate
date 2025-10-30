@@ -190,6 +190,65 @@ function debounce(func, wait) {
   }
 }
 
+// Update scroll progress bar
+function updateScrollProgress() {
+  const progressBar = document.getElementById('scroll-progress')
+  if (!progressBar) return
+
+  const windowHeight = window.innerHeight
+  const documentHeight = document.documentElement.scrollHeight
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+
+  const scrollPercent = (scrollTop / (documentHeight - windowHeight)) * 100
+  progressBar.style.width = `${Math.min(scrollPercent, 100)}%`
+}
+
+// Update active section in navigation
+function updateActiveSection() {
+  const sections = ['hero', 'features', 'status', 'faq', 'waitlist']
+  const navLinks = document.querySelectorAll('.nav a')
+
+  let currentSection = 'hero'
+
+  sections.forEach(sectionId => {
+    const section = document.getElementById(sectionId)
+    if (section) {
+      const rect = section.getBoundingClientRect()
+      if (rect.top <= 100 && rect.bottom >= 100) {
+        currentSection = sectionId
+      }
+    }
+  })
+
+  navLinks.forEach(link => {
+    const href = link.getAttribute('href')
+    if (href === `#${currentSection}`) {
+      link.classList.add('active')
+    } else {
+      link.classList.remove('active')
+    }
+  })
+}
+
+// Add scrolled class to header
+function updateHeaderScroll() {
+  const header = document.querySelector('.header')
+  if (header) {
+    if (window.scrollY > 50) {
+      header.classList.add('header--scrolled')
+    } else {
+      header.classList.remove('header--scrolled')
+    }
+  }
+}
+
+// Combined scroll handler
+const handleScroll = debounce(() => {
+  updateScrollProgress()
+  updateActiveSection()
+  updateHeaderScroll()
+}, 10)
+
 // Toggle high contrast mode
 function toggleContrast() {
   const root = document.documentElement
@@ -348,6 +407,11 @@ function renderApp() {
             </svg>
           </button>
         </nav>
+      </div>
+
+      <!-- Scroll Progress Indicator -->
+      <div class="header__progress">
+        <div class="header__progress-bar" id="scroll-progress"></div>
       </div>
     </header>
 
@@ -895,6 +959,14 @@ function renderApp() {
 
   // Initialize lazy loading
   initLazyLoading()
+
+  // Attach scroll handler
+  window.addEventListener('scroll', handleScroll, { passive: true })
+
+  // Initial scroll update
+  updateScrollProgress()
+  updateActiveSection()
+  updateHeaderScroll()
 }
 
 // Initialize app
