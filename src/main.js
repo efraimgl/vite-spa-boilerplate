@@ -8,7 +8,8 @@ const state = {
     beta: 0,
     theta: 0,
     delta: 0
-  }
+  },
+  waitlistSubmitted: false
 }
 
 // Simulate brain wave data updates
@@ -82,6 +83,30 @@ function updateMetrics() {
   if (deltaBar) deltaBar.style.width = state.brainWaveData.delta + '%'
 }
 
+// Handle waitlist form submission
+function handleWaitlistSubmit(event) {
+  event.preventDefault()
+
+  const emailInput = document.getElementById('email-input')
+  const email = emailInput.value
+
+  // Mock data submission (no real API call)
+  console.log('Mock waitlist submission:', { email, timestamp: new Date().toISOString() })
+
+  // Update state
+  state.waitlistSubmitted = true
+
+  // Hide form and show success message
+  const form = document.getElementById('waitlist-form')
+  const successMessage = document.getElementById('success-message')
+
+  if (form) form.style.display = 'none'
+  if (successMessage) {
+    successMessage.style.display = 'block'
+    successMessage.classList.add('show')
+  }
+}
+
 // Toggle connection
 function toggleConnection() {
   state.isConnected = !state.isConnected
@@ -141,7 +166,8 @@ function renderApp() {
         <nav class="nav">
           <a href="#features">Features</a>
           <a href="#status">Status</a>
-          <a href="#about">About</a>
+          <a href="#faq">Q&A</a>
+          <a href="#waitlist">Waitlist</a>
         </nav>
       </div>
     </header>
@@ -335,6 +361,66 @@ function renderApp() {
       </div>
     </section>
 
+    <!-- Q&A Section -->
+    <section id="faq" class="faq-section">
+      <div class="faq-container">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-grid">
+          <div class="faq-item">
+            <h3>What are brain waves?</h3>
+            <p>Brain waves are electrical impulses in the brain. They are measured in different frequency ranges: Alpha (relaxation), Beta (active thinking), Theta (meditation), and Delta (deep sleep).</p>
+          </div>
+          <div class="faq-item">
+            <h3>How does Neural Sync work?</h3>
+            <p>Neural Sync uses advanced AI algorithms to analyze brain wave patterns from compatible EEG devices, providing real-time insights into your mental state and cognitive performance.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Is my data secure?</h3>
+            <p>Absolutely. All your brain wave data is encrypted end-to-end and processed on-device. We never share or sell your personal information.</p>
+          </div>
+          <div class="faq-item">
+            <h3>What devices are supported?</h3>
+            <p>Neural Sync supports most consumer EEG devices including Muse, NeuroSky, Emotiv, and other Bluetooth-enabled brain wave sensors.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Can I use this for meditation?</h3>
+            <p>Yes! Neural Sync is perfect for meditation practice. Track your theta waves to measure depth of meditation and improve your mindfulness techniques.</p>
+          </div>
+          <div class="faq-item">
+            <h3>How accurate is the analysis?</h3>
+            <p>Our AI-powered analysis achieves 95%+ accuracy in brain wave classification, trained on millions of EEG samples from clinical research data.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Waitlist Section -->
+    <section id="waitlist" class="waitlist-section">
+      <div class="waitlist-container">
+        <div class="waitlist-content">
+          <h2>Join the Waitlist</h2>
+          <p>Be the first to experience Neural Sync. Enter your email to get early access when we launch.</p>
+
+          <form id="waitlist-form" class="waitlist-form">
+            <input
+              type="email"
+              id="email-input"
+              class="email-input"
+              placeholder="Enter your email address"
+              required
+            />
+            <button type="submit" class="btn btn-primary">Join Waitlist</button>
+          </form>
+
+          <div id="success-message" class="success-message" style="display: none;">
+            <div class="success-icon">✓</div>
+            <h3>Successfully Signed Up!</h3>
+            <p>Thank you for joining the waitlist. We'll notify you when Neural Sync is ready.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
       <div class="footer-content">
@@ -352,6 +438,22 @@ function renderApp() {
   const connectBtn = document.getElementById('connect-btn')
   if (connectBtn) {
     connectBtn.addEventListener('click', toggleConnection)
+  }
+
+  const waitlistForm = document.getElementById('waitlist-form')
+  if (waitlistForm) {
+    waitlistForm.addEventListener('submit', handleWaitlistSubmit)
+  }
+
+  // Show success message if already submitted
+  if (state.waitlistSubmitted) {
+    const form = document.getElementById('waitlist-form')
+    const successMessage = document.getElementById('success-message')
+    if (form) form.style.display = 'none'
+    if (successMessage) {
+      successMessage.style.display = 'block'
+      successMessage.classList.add('show')
+    }
   }
 }
 
