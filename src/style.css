@@ -579,7 +579,9 @@ body::before {
 
 .btn:hover:not(:disabled) {
   transform: scale(1.05);
-  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+  box-shadow:
+    0 8px 32px rgba(102, 126, 234, 0.5),
+    0 0 60px rgba(102, 126, 234, 0.3);
 }
 
 .btn-primary {
@@ -590,7 +592,9 @@ body::before {
 
 .btn-primary:hover:not(:disabled) {
   background: linear-gradient(135deg, var(--button-hover), var(--button-bg));
-  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+  box-shadow:
+    0 8px 32px rgba(102, 126, 234, 0.6),
+    0 0 60px rgba(118, 75, 162, 0.4);
 }
 
 .btn-secondary {
@@ -719,8 +723,12 @@ body::before {
 
 .value-prop-card:hover {
   transform: translateX(8px);
-  border-color: rgba(102, 126, 234, 0.5);
-  box-shadow: 0 12px 48px rgba(102, 126, 234, 0.25);
+  border-color: rgba(102, 126, 234, 0.6);
+  box-shadow:
+    0 12px 48px rgba(102, 126, 234, 0.35),
+    0 0 80px rgba(118, 75, 162, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .value-prop-number {
@@ -800,8 +808,12 @@ body::before {
 
 .step-card:hover {
   transform: translateY(-8px);
-  border-color: rgba(102, 126, 234, 0.5);
-  box-shadow: 0 16px 48px rgba(102, 126, 234, 0.25);
+  border-color: rgba(102, 126, 234, 0.6);
+  box-shadow:
+    0 16px 48px rgba(102, 126, 234, 0.35),
+    0 0 80px rgba(118, 75, 162, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .step-number {
@@ -896,8 +908,12 @@ body::before {
 
 .feature-card:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 16px 48px rgba(102, 126, 234, 0.3);
-  border-color: rgba(102, 126, 234, 0.5);
+  box-shadow:
+    0 16px 48px rgba(102, 126, 234, 0.4),
+    0 0 80px rgba(102, 126, 234, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-color: rgba(102, 126, 234, 0.6);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .feature-icon {
@@ -1270,8 +1286,12 @@ body::before {
 
 .metric:hover {
   transform: translateY(-4px);
-  border-color: rgba(102, 126, 234, 0.5);
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+  border-color: rgba(102, 126, 234, 0.6);
+  box-shadow:
+    0 8px 24px rgba(102, 126, 234, 0.3),
+    0 0 40px rgba(102, 126, 234, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .metric-value {
@@ -1360,7 +1380,12 @@ body::before {
 
 .faq-item:hover {
   border-color: var(--color-accent-neon);
-  box-shadow: var(--shadow-lg);
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23),
+    0 0 40px rgba(168, 85, 247, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  background: rgba(168, 85, 247, 0.05);
 }
 
 .faq-item summary {
@@ -1474,8 +1499,12 @@ body::before {
 
 .use-case-card:hover {
   transform: translateY(-8px);
-  border-color: rgba(102, 126, 234, 0.5);
-  box-shadow: 0 16px 48px rgba(102, 126, 234, 0.25);
+  border-color: rgba(102, 126, 234, 0.6);
+  box-shadow:
+    0 16px 48px rgba(102, 126, 234, 0.35),
+    0 0 80px rgba(240, 147, 251, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .use-case-card h3 {
@@ -1544,8 +1573,12 @@ body::before {
 
 .testimonial-card:hover {
   transform: translateY(-8px);
-  border-color: rgba(102, 126, 234, 0.5);
-  box-shadow: 0 16px 48px rgba(102, 126, 234, 0.25);
+  border-color: rgba(102, 126, 234, 0.6);
+  box-shadow:
+    0 16px 48px rgba(102, 126, 234, 0.35),
+    0 0 80px rgba(118, 75, 162, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .testimonial-content {
@@ -1629,8 +1662,12 @@ body::before {
 
 .pricing-card:hover {
   transform: translateY(-12px);
-  border-color: rgba(102, 126, 234, 0.6);
-  box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+  border-color: rgba(102, 126, 234, 0.7);
+  box-shadow:
+    0 20px 60px rgba(102, 126, 234, 0.4),
+    0 0 100px rgba(118, 75, 162, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .pricing-badge {
