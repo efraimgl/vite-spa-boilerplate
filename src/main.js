@@ -12,6 +12,105 @@ const state = {
   waitlistSubmitted: false
 }
 
+// Canvas Brain Wave Visualization
+class BrainWaveCanvas {
+  constructor(canvasId) {
+    this.canvas = document.getElementById(canvasId)
+    if (!this.canvas) return
+
+    this.ctx = this.canvas.getContext('2d')
+    this.time = 0
+    this.frequency = 10
+    this.amplitude = 50
+    this.isActive = true
+    this.animationFrame = null
+
+    this.resizeCanvas()
+    window.addEventListener('resize', () => this.resizeCanvas())
+  }
+
+  resizeCanvas() {
+    if (!this.canvas) return
+    this.canvas.width = this.canvas.offsetWidth * window.devicePixelRatio
+    this.canvas.height = this.canvas.offsetHeight * window.devicePixelRatio
+    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
+  }
+
+  drawWave(freq, amp, color, offset) {
+    const width = this.canvas.offsetWidth
+    const height = this.canvas.offsetHeight
+
+    this.ctx.beginPath()
+    this.ctx.strokeStyle = color
+    this.ctx.lineWidth = 2
+    this.ctx.globalAlpha = 0.8
+
+    for (let x = 0; x < width; x++) {
+      const y = height / 2 + Math.sin((x * 0.01 * freq) + this.time + offset) * amp
+
+      if (x === 0) {
+        this.ctx.moveTo(x, y)
+      } else {
+        this.ctx.lineTo(x, y)
+      }
+    }
+
+    this.ctx.stroke()
+
+    // Add glow effect
+    this.ctx.shadowColor = color
+    this.ctx.shadowBlur = 20
+    this.ctx.stroke()
+    this.ctx.shadowBlur = 0
+    this.ctx.globalAlpha = 1
+  }
+
+  animate() {
+    if (!this.isActive || !this.canvas) return
+
+    const width = this.canvas.offsetWidth
+    const height = this.canvas.offsetHeight
+
+    // Clear with fade effect
+    this.ctx.fillStyle = 'rgba(10, 14, 39, 0.1)'
+    this.ctx.fillRect(0, 0, width, height)
+
+    // Draw multiple waves
+    const waves = [
+      { freq: this.frequency * 0.5, amp: this.amplitude * 0.3, color: '#06B6D4', offset: 0 },
+      { freq: this.frequency, amp: this.amplitude, color: '#8B5CF6', offset: Math.PI * 0.5 },
+      { freq: this.frequency * 1.5, amp: this.amplitude * 0.7, color: '#EC4899', offset: Math.PI }
+    ]
+
+    waves.forEach(wave => {
+      this.drawWave(wave.freq, wave.amp, wave.color, wave.offset)
+    })
+
+    this.time += 0.05
+    this.animationFrame = requestAnimationFrame(() => this.animate())
+  }
+
+  start() {
+    this.isActive = true
+    this.animate()
+  }
+
+  stop() {
+    this.isActive = false
+    if (this.animationFrame) {
+      cancelAnimationFrame(this.animationFrame)
+    }
+  }
+
+  setFrequency(freq) {
+    this.frequency = freq
+  }
+
+  setAmplitude(amp) {
+    this.amplitude = amp
+  }
+}
+
 // Simulate brain wave data updates
 function simulateBrainWaveData() {
   if (state.isConnected) {
@@ -684,24 +783,61 @@ function renderApp() {
     </section>
 
     <!-- Status Section -->
-    <section id="status" class="status-section">
+    <section id="status" class="status-section" aria-labelledby="status-heading">
       <div class="status-card">
         <div class="status-header">
-          <h2>Brain Wave Monitor</h2>
-          <p>Live analysis of your neural activity</p>
+          <h2 id="status-heading">Neural Sync Monitor</h2>
+          <div class="monitor-status">
+            <span class="status-indicator active" id="status-indicator"></span>
+            <span class="status-text">Syncing</span>
+          </div>
         </div>
 
         <div class="brain-wave-display">
-          <div class="wave-animation">
-            <svg width="80" height="80" viewBox="0 0 80 80" style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));">
-              <circle cx="40" cy="40" r="30" stroke="#fff" stroke-width="3" fill="none" opacity="0.6"/>
-              <circle cx="40" cy="40" r="20" stroke="#fff" stroke-width="2" fill="none" opacity="0.4"/>
-              <line x1="40" y1="20" x2="40" y2="60" stroke="#fff" stroke-width="3" opacity="0.5"/>
-              <line x1="20" y1="40" x2="60" y2="40" stroke="#fff" stroke-width="3" opacity="0.5"/>
-            </svg>
+          <canvas
+            id="brain-wave-canvas"
+            class="wave-canvas"
+            role="img"
+            aria-label="Real-time brain wave visualization showing neural synchronization patterns">
+          </canvas>
+        </div>
+
+        <!-- Wave Controls -->
+        <div class="wave-controls">
+          <div class="control-group">
+            <label for="frequency-slider" class="control-label">
+              Frequency: <span id="frequency-value">10</span>Hz
+            </label>
+            <input
+              id="frequency-slider"
+              type="range"
+              min="1"
+              max="30"
+              value="10"
+              class="control-slider"
+              aria-label="Adjust brain wave frequency">
           </div>
-          <h3>Device Disconnected</h3>
-          <p>Connect your device to begin analysis</p>
+
+          <div class="control-group">
+            <label for="amplitude-slider" class="control-label">
+              Amplitude: <span id="amplitude-value">50</span>%
+            </label>
+            <input
+              id="amplitude-slider"
+              type="range"
+              min="10"
+              max="100"
+              value="50"
+              class="control-slider"
+              aria-label="Adjust brain wave amplitude">
+          </div>
+
+          <button
+            id="wave-toggle"
+            class="control-button"
+            aria-pressed="true">
+            Pause Monitoring
+          </button>
         </div>
 
         <div class="metrics-grid">
@@ -955,6 +1091,58 @@ function renderApp() {
   const savedTheme = localStorage.getItem('theme')
   if (savedTheme === 'high-contrast') {
     document.documentElement.setAttribute('data-theme', 'high-contrast')
+  }
+
+  // Initialize Brain Wave Canvas
+  let brainWaveCanvas = null
+  const canvas = document.getElementById('brain-wave-canvas')
+  if (canvas) {
+    brainWaveCanvas = new BrainWaveCanvas('brain-wave-canvas')
+    brainWaveCanvas.start()
+
+    // Connect frequency slider
+    const freqSlider = document.getElementById('frequency-slider')
+    const freqValue = document.getElementById('frequency-value')
+    if (freqSlider && freqValue) {
+      freqSlider.addEventListener('input', (e) => {
+        const freq = Number(e.target.value)
+        freqValue.textContent = freq
+        brainWaveCanvas.setFrequency(freq)
+      })
+    }
+
+    // Connect amplitude slider
+    const ampSlider = document.getElementById('amplitude-slider')
+    const ampValue = document.getElementById('amplitude-value')
+    if (ampSlider && ampValue) {
+      ampSlider.addEventListener('input', (e) => {
+        const amp = Number(e.target.value)
+        ampValue.textContent = amp
+        brainWaveCanvas.setAmplitude(amp)
+      })
+    }
+
+    // Connect toggle button
+    const toggleBtn = document.getElementById('wave-toggle')
+    const statusIndicator = document.getElementById('status-indicator')
+    const statusText = document.querySelector('.status-text')
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        if (brainWaveCanvas.isActive) {
+          brainWaveCanvas.stop()
+          toggleBtn.textContent = 'Resume Monitoring'
+          toggleBtn.setAttribute('aria-pressed', 'false')
+          statusIndicator?.classList.remove('active')
+          if (statusText) statusText.textContent = 'Paused'
+        } else {
+          brainWaveCanvas.start()
+          toggleBtn.textContent = 'Pause Monitoring'
+          toggleBtn.setAttribute('aria-pressed', 'true')
+          statusIndicator?.classList.add('active')
+          if (statusText) statusText.textContent = 'Syncing'
+        }
+      })
+    }
   }
 
   // Initialize lazy loading
