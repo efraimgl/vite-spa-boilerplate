@@ -83,6 +83,113 @@ function updateMetrics() {
   if (deltaBar) deltaBar.style.width = state.brainWaveData.delta + '%'
 }
 
+// Focus Management System
+const FocusManager = {
+  trapFocus(element) {
+    const focusableElements = element.querySelectorAll(
+      'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
+    )
+    const firstFocusable = focusableElements[0]
+    const lastFocusable = focusableElements[focusableElements.length - 1]
+
+    const handleTab = (e) => {
+      if (e.key === 'Tab') {
+        if (e.shiftKey && document.activeElement === firstFocusable) {
+          lastFocusable.focus()
+          e.preventDefault()
+        } else if (!e.shiftKey && document.activeElement === lastFocusable) {
+          firstFocusable.focus()
+          e.preventDefault()
+        }
+      }
+      if (e.key === 'Escape') {
+        element.dispatchEvent(new CustomEvent('escapepressed'))
+      }
+    }
+
+    element.addEventListener('keydown', handleTab)
+    return () => element.removeEventListener('keydown', handleTab)
+  }
+}
+
+// Accessible notification system
+function announce(message, priority = 'polite') {
+  const notificationArea = document.getElementById('notification-area')
+  if (notificationArea) {
+    notificationArea.setAttribute('aria-live', priority)
+    notificationArea.textContent = message
+
+    setTimeout(() => {
+      notificationArea.textContent = ''
+    }, 3000)
+  }
+}
+
+// Form error handling
+function showError(fieldId, message) {
+  const field = document.getElementById(fieldId)
+  const errorElement = document.getElementById(`${fieldId}-error`)
+
+  if (field && errorElement) {
+    field.setAttribute('aria-invalid', 'true')
+    errorElement.textContent = message
+    errorElement.setAttribute('role', 'alert')
+    announce(`Error: ${message}`, 'assertive')
+  }
+}
+
+function clearError(fieldId) {
+  const field = document.getElementById(fieldId)
+  const errorElement = document.getElementById(`${fieldId}-error`)
+
+  if (field && errorElement) {
+    field.setAttribute('aria-invalid', 'false')
+    errorElement.textContent = ''
+  }
+}
+
+// Intersection Observer for lazy loading
+function initLazyLoading() {
+  if (!('IntersectionObserver' in window)) {
+    // Fallback for browsers without IntersectionObserver
+    document.querySelectorAll('img[data-src]').forEach(img => {
+      img.src = img.dataset.src
+    })
+    return
+  }
+
+  const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target
+        img.src = img.dataset.src
+        img.removeAttribute('data-src')
+        imageObserver.unobserve(img)
+      }
+    })
+  }, {
+    rootMargin: '50px 0px',
+    threshold: 0.01
+  })
+
+  document.querySelectorAll('img[data-src]').forEach(img => {
+    imageObserver.observe(img)
+  })
+}
+
+// Debounce utility for performance
+function debounce(func, wait) {
+  let timeout
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout)
+      func(...args)
+    }
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+  }
+}
+
 // Toggle high contrast mode
 function toggleContrast() {
   const root = document.documentElement
@@ -104,21 +211,52 @@ function handleWaitlistSubmit(event) {
   const emailInput = document.getElementById('email-input')
   const email = emailInput.value
 
+  // Clear any previous errors
+  clearError('email-input')
+
+  // Validate email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!email) {
+    showError('email-input', 'Email address is required')
+    return
+  }
+  if (!emailRegex.test(email)) {
+    showError('email-input', 'Please enter a valid email address')
+    return
+  }
+
+  // Show loading state
+  const submitButton = event.target.querySelector('button[type="submit"]')
+  const loadingSpinner = submitButton.querySelector('.loading-spinner')
+  submitButton.disabled = true
+  if (loadingSpinner) loadingSpinner.style.display = 'inline-block'
+
   // Mock data submission (no real API call)
   console.log('Mock waitlist submission:', { email, timestamp: new Date().toISOString() })
 
-  // Update state
-  state.waitlistSubmitted = true
+  // Simulate API delay
+  setTimeout(() => {
+    // Update state
+    state.waitlistSubmitted = true
 
-  // Hide form and show success message
-  const form = document.getElementById('waitlist-form')
-  const successMessage = document.getElementById('success-message')
+    // Hide form and show success message
+    const form = document.getElementById('waitlist-form')
+    const successMessage = document.getElementById('success-message')
 
-  if (form) form.style.display = 'none'
-  if (successMessage) {
-    successMessage.style.display = 'block'
-    successMessage.classList.add('show')
-  }
+    if (form) form.style.display = 'none'
+    if (successMessage) {
+      successMessage.style.display = 'block'
+      successMessage.classList.add('show')
+      successMessage.focus()
+    }
+
+    // Announce success to screen readers
+    announce('Successfully joined the waitlist! Check your email for next steps.', 'polite')
+
+    // Reset loading state
+    submitButton.disabled = false
+    if (loadingSpinner) loadingSpinner.style.display = 'none'
+  }, 800)
 }
 
 // Toggle connection
@@ -164,8 +302,23 @@ function renderApp() {
   const app = document.querySelector('#app')
 
   app.innerHTML = `
-    <!-- Skip to Content Link for Screen Readers -->
-    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+    <!-- Skip Links for Screen Readers -->
+    <div class="skip-links" role="navigation" aria-label="Skip links">
+      <a href="#main-content" class="skip-link">Skip to main content</a>
+      <a href="#features" class="skip-link">Skip to features</a>
+      <a href="#status" class="skip-link">Skip to neural monitor</a>
+      <a href="#faq" class="skip-link">Skip to FAQ</a>
+      <a href="#waitlist" class="skip-link">Skip to waitlist</a>
+    </div>
+
+    <!-- Live Region for Screen Reader Announcements -->
+    <div
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      class="notification-area sr-only"
+      id="notification-area">
+    </div>
 
     <!-- Header -->
     <header class="header" role="banner">
@@ -304,9 +457,9 @@ function renderApp() {
     </section>
 
     <!-- Value Proposition Section -->
-    <section class="value-prop-section">
+    <section class="value-prop-section" aria-labelledby="value-prop-heading">
       <div class="value-prop-container">
-        <h2>Why Neural Sync Changes Everything</h2>
+        <h2 id="value-prop-heading">Why Neural Sync Changes Everything</h2>
         <p class="section-subtitle">Stop guessing about your mental state. Start optimizing it.</p>
         <div class="value-prop-grid">
           <div class="value-prop-card">
@@ -332,9 +485,9 @@ function renderApp() {
     </section>
 
     <!-- How It Works Section -->
-    <section class="how-it-works-section">
+    <section class="how-it-works-section" aria-labelledby="how-it-works-heading">
       <div class="how-it-works-container">
-        <h2>How Neural Sync Works</h2>
+        <h2 id="how-it-works-heading">How Neural Sync Works</h2>
         <p class="section-subtitle">Three simple steps to understanding your mind</p>
         <div class="steps-grid">
           <div class="step-card">
@@ -648,15 +801,30 @@ function renderApp() {
             </div>
           </div>
 
-          <form id="waitlist-form" class="waitlist-form">
-            <input
-              type="email"
-              id="email-input"
-              class="email-input"
-              placeholder="Enter your email address"
-              required
-            />
-            <button type="submit" class="btn btn-primary btn-large">Secure Your Spot Now</button>
+          <form id="waitlist-form" class="waitlist-form" role="form" aria-label="Waitlist signup form" novalidate>
+            <div class="form-group">
+              <label for="email-input" class="sr-only">
+                Email Address
+                <span class="required" aria-label="required">*</span>
+              </label>
+              <input
+                type="email"
+                id="email-input"
+                name="email"
+                class="email-input"
+                placeholder="Enter your email address"
+                aria-required="true"
+                aria-invalid="false"
+                aria-describedby="email-error email-hint"
+                required
+              />
+              <span id="email-hint" class="sr-only">We'll never share your email</span>
+              <span id="email-error" role="alert" class="form-error" aria-live="polite"></span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-large" aria-label="Submit waitlist form">
+              Secure Your Spot Now
+              <span class="loading-spinner" aria-hidden="true" style="display:none;"></span>
+            </button>
           </form>
 
           <p class="waitlist-privacy">We respect your privacy. Unsubscribe anytime. No spam, ever.</p>
@@ -724,6 +892,9 @@ function renderApp() {
   if (savedTheme === 'high-contrast') {
     document.documentElement.setAttribute('data-theme', 'high-contrast')
   }
+
+  // Initialize lazy loading
+  initLazyLoading()
 }
 
 // Initialize app
